@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: presentation-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: presentation-service
+  template:
+    metadata:
+      labels:
+        app: presentation-service
+    spec:
+      containers:
+        - name: presentation-service-container
+          image: navin3d/infrasight-presentation-service
+          ports:
+            - containerPort: 8012
+          env:
+            - name: SERVER_PORT
+              value: "8012"
+            - name: EUREKA_HOST
+              value: eureka-cip
+            - name: SPRING_DATA_MONGODB_HOST
+              value: mongo-cip
+            - name: SPRING_DATA_MONGODB_PORT
+              value: "27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: presentation-cip
+spec:
+  type: ClusterIP
+  selector:
+    app: presentation-service
+  ports:
+    - port: 8012
+      targetPort: 8012
