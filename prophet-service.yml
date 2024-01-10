@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prophet-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prophet-service
+  template:
+    metadata:
+      labels:
+        app: prophet-service
+    spec:
+      containers:
+        - name: prophet-service-container
+          image: navin3d/prophet-service
+          ports:
+            - containerPort: 8013
+          env:
+            - name: SERVER_PORT
+              value: "8013"
+            - name: EUREKA_HOST
+              value: eureka-cip
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prophet-cip
+spec:
+  type: ClusterIP
+  selector:
+    app: prophet-service
+  ports:
+    - port: 8013
+      targetPort: 8013

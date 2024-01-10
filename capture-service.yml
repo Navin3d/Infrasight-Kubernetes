@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capture-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capture-service
+  template:
+    metadata:
+      labels:
+        app: capture-service
+    spec:
+      containers:
+        - name: capture-service-container
+          image: navin3d/infrasight-stats-capture-service
+          ports:
+            - containerPort: 8016
+          env:
+            - name: capture_PORT
+              value: "8016"
+            - name: EUREKA_HOST
+              value: eureka-cip
+            - name: SPRING_DATA_MONGODB_HOST
+              value: mongo-cip
+            - name: SPRING_DATA_MONGODB_PORT
+              value: "27017"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capture-cip
+spec:
+  type: ClusterIP
+  selector:
+    app: capture-service
+  ports:
+    - port: 8016
+      targetPort: 8016
