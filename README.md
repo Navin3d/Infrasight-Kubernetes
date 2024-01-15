@@ -166,4 +166,36 @@ try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PAS
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+private static void readSqlFiles(String folderPath) {
+        File folder = new File(folderPath);
+
+        // Check if the path is a directory
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+
+            // Iterate over files and subdirectories
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        // Recursively call the method for nested folders
+                        readSqlFiles(file.getAbsolutePath());
+                    } else if (file.getName().toLowerCase().endsWith(".sql")) {
+                        // Read and print the content of SQL files
+                        try {
+                            String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+                            System.out.println("File: " + file.getAbsolutePath());
+                            System.out.println("Content:\n" + content);
+                            System.out.println("---------------------------------------------");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("Invalid folder path: " + folderPath);
+        }
+    }
 ```
