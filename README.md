@@ -152,4 +152,18 @@ public class DepartmentDao {
 	}
 
 }
+
+try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
+            // Perform database operations here
+            String sql = "SELECT * FROM your_table";
+            try (PreparedStatement statement = connection.prepareStatement(sql);
+                 ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Process the ResultSet as needed
+                    // Example: String value = resultSet.getString("column_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 ```
