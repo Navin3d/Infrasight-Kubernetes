@@ -207,4 +207,22 @@ public static boolean containsWordInList(String inputString, List<String> wordLi
         }
         return false;
     }
+
+
+public static void copyFolder(String sourcePathString, String destinationPathString) throws IOException {
+        Path sourcePath = Paths.get(sourcePathString);
+        Path destinationPath = Paths.get(destinationPathString);
+
+        // Copy source folder to destination folder
+        Files.walk(sourcePath)
+             .forEach(sourcePathElement -> {
+                 try {
+                     Path relativePath = sourcePath.relativize(sourcePathElement);
+                     Path destinationPathElement = destinationPath.resolve(relativePath);
+                     Files.copy(sourcePathElement, destinationPathElement, StandardCopyOption.REPLACE_EXISTING);
+                 } catch (IOException e) {
+                     e.printStackTrace(); // Handle the exception according to your needs
+                 }
+             });
+    }
 ```
