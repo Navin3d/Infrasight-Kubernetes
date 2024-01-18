@@ -198,4 +198,13 @@ private static void readSqlFiles(String folderPath) {
             System.out.println("Invalid folder path: " + folderPath);
         }
     }
+
+public static boolean containsWordInList(String inputString, List<String> wordList) {
+        for (String word : wordList) {
+            if (inputString.contains(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
 ```
