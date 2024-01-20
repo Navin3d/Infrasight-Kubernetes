@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-service-deployment
+  name: server-deployment
 spec:
   replicas: 2
   selector:
@@ -13,19 +13,29 @@ spec:
         app: server-service
     spec:
       containers:
-        - name: server-service-container
+        - name: server-container
           image: navin3d/infrasight-server-service
           ports:
-            - containerPort: 8015
+            - containerPort: 8014
           env:
-            - name: SERVER_PORT
-              value: "8015"
             - name: EUREKA_HOST
               value: eureka-cip
+            - name: SERVER_PORT
+              value: "8014"
             - name: SPRING_DATA_MONGODB_HOST
               value: mongo-cip
             - name: SPRING_DATA_MONGODB_PORT
               value: "27017"
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service
@@ -36,5 +46,5 @@ spec:
   selector:
     app: server-service
   ports:
-    - port: 8015
-      targetPort: 8015
+    - port: 8014
+      targetPort: 8014

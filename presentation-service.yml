@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: presentation-service
+  name: presentation-deployment
 spec:
   replicas: 3
   selector:
@@ -13,7 +13,7 @@ spec:
         app: presentation-service
     spec:
       containers:
-        - name: presentation-service-container
+        - name: presentation-container
           image: navin3d/infrasight-presentation-service
           ports:
             - containerPort: 8012
@@ -26,6 +26,16 @@ spec:
               value: mongo-cip
             - name: SPRING_DATA_MONGODB_PORT
               value: "27017"
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service

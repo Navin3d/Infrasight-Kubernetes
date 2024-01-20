@@ -26,6 +26,16 @@ spec:
               value: mongo-cip
             - name: SPRING_DATA_MONGODB_PORT
               value: "27017"
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service

@@ -6,11 +6,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: auth-deployment
+      app: auth-service
   template:
     metadata:
       labels:
-        app: auth-deployment
+        app: auth-service
     spec:
       containers:
         - name: auth-container
@@ -18,14 +18,24 @@ spec:
           ports:
             - containerPort: 8011
           env:
-            - name: SERVER_PORT
-              value: "8011"
             - name: EUREKA_HOST
               value: eureka-cip
+            - name: SERVER_PORT
+              value: "8011"
             - name: SPRING_DATA_MONGODB_HOST
               value: mongo-cip
             - name: SPRING_DATA_MONGODB_PORT
               value: "27017"
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +44,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: auth-deployment
+    app: auth-service
   ports:
     - port: 8011
       targetPort: 8011

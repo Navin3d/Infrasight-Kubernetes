@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ml-service-deployment
+  name: ml-deployment
 spec:
   replicas: 1
   selector:
@@ -13,7 +13,7 @@ spec:
         app: ml-service
     spec:
       containers:
-        - name: ml-service-container
+        - name: ml-container
           image: navin3d/infrasight-ml-service
           ports:
             - containerPort: 8000
